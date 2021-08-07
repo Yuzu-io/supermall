@@ -36,7 +36,7 @@ export default {
           text: '分类'
         },
         {
-          path: '/shop',
+          path: '/shopcart',
           src: require('@/assets/img/tabbar/shopcart.svg'),
           src_active: require('@/assets/img/tabbar/shopcart_active.svg'),
           text: '购物车'
