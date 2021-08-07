@@ -1,7 +1,7 @@
 <template>
   <tab-bar>
-    <tab-bar-item v-for="item in list"
-                  :key="item"
+    <tab-bar-item v-for="(item,index) in list"
+                  :key="index"
                   :path="item.path">
       <img slot="item-icon"
            :src="item.src"
