@@ -2,7 +2,7 @@
   <div>
     <h2>分类</h2>
     <div class="wrapper"
-         ref="wrapper-cate">
+         ref="wrapperCate">
       <ul class="content">
         <div class="box1" @click="itemClick">按钮</div>
         <li>商品类别1</li>
@@ -125,7 +125,7 @@ export default {
     }
   },
   mounted () {
-    this.scroll = new BScroll(this.$refs.wrapper-cate,{
+    this.scroll = new BScroll(this.$refs.wrapperCate,{
       probeType:3,
       pullUpLoad:true,
       // 如果是要点击非按钮元素想要添加

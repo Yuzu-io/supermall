@@ -4,7 +4,10 @@
       <div slot="center">购物街</div>
     </nav-bar>
 
-    <scroll class="content">
+    <scroll class="content"
+            ref="scroll"
+            :probe-type="3"
+            @scroll="contentScroll">
       <home-swiper :banners="banners"></home-swiper>
       <home-recommend-view :recommends="recommends"></home-recommend-view>
       <home-feature-view></home-feature-view>
@@ -14,6 +17,7 @@
 
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
+    <back-top @click.native="backClick"></back-top>
 
   </div>
 </template>
@@ -21,9 +25,10 @@
 <script>
 // 公共组件
 import NavBar from '../../components/common/navbar/NavBar.vue'
+import Scroll from '../../components/common/scroll/Scroll.vue'
 import TabControl from '../../components/content/tabControl/TabControl.vue'
 import GoodsList from '../../components/content/goods/GoodsList.vue'
-import Scroll from '../../components/common/scroll/Scroll.vue'
+import BackTop from '../../components/content/backTop/BackTop.vue'
 
 // home子组件
 import HomeSwiper from './childComps/HomeSwiper.vue'
@@ -54,9 +59,10 @@ export default {
   },
   components: {
     NavBar,
+    Scroll,
     TabControl,
     GoodsList,
-    Scroll,
+    BackTop,
 
     HomeSwiper,
     HomeRecommendView,
@@ -88,6 +94,12 @@ export default {
           break;
       }
     },
+    backClick () {
+      this.$refs.scroll.scroll.scrollTo(0, 0, 500)
+    },
+    contentScroll(position){
+
+    },
 
 
     /**
@@ -116,9 +128,9 @@ export default {
 
 <style scoped>
 #home {
-  padding: 44px 0 0 0;
+  /* padding: 44px 0 0 0; */
   height: 100vh;
-  position: relative;
+  /* position: relative; */
 }
 .home-nav {
   background-color: var(--color-tint);
@@ -131,23 +143,23 @@ export default {
 }
 .tab-control {
   /* position: sticky; */
-  top: 44px;
+  /* top: 44px; */
   background-color: #fff;
   z-index: 9999;
 }
 
-.content{
+/* .content{
   position: absolute;
   top: 43px;
   bottom: 49px;
   left: 0;
   right: 0;
   overflow: hidden;
-}
+} */
 
-/* .content{
+.content {
   height: calc(100% - 93px);
   overflow: hidden;
-  margin: 44px 0 0 0;
-} */
+  margin: 43px 0 0 0;
+}
 </style>
