@@ -53,15 +53,21 @@ export default {
 
   },
   methods: {
+    // 返回顶部
     scrollTo (x, y, time) {
-      this.scroll && this.scroll.scrollTo && this.scroll.scrollTo(x, y, time)
+      this.scroll && this.scroll.scrollTo(x, y, time)
     },
+    // 上拉加载
     finishPullUp () {
-      this.scroll && this.scroll.scrollTo && this.scroll.finishPullUp()
+      this.scroll && this.scroll.finishPullUp()
     },
+    // 刷新
     refresh () {
-      console.log('---');
-      this.scroll && this.scroll.scrollTo && this.scroll.refresh()
+      this.scroll && this.scroll.refresh()
+    },
+    // 
+    getScrollY(){
+      return this.scroll ? this.scroll.y : 0
     }
   },
 }
