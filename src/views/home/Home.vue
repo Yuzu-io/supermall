@@ -119,9 +119,6 @@ export default {
     },
     loadMore () {
       this.getHomeGoods(this.currentType)
-
-      // 
-      this.$refs.scroll.refresh()
     },
 
 
@@ -142,6 +139,7 @@ export default {
         this.goods[type].list.push(...res.data.list)
         this.goods[type].page += 1
 
+        // 完成上拉加载更多
         this.$refs.scroll.finishPullUp()
       })
     }
