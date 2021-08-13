@@ -42,7 +42,7 @@ export default {
     })
 
     // 3、监听上拉事件
-    this.scroll.on('pullingUp',()=>{
+    this.scroll.on('pullingUp', () => {
       // console.log('1');
       this.$emit('pullingUp')
     })
@@ -50,13 +50,14 @@ export default {
   },
   methods: {
     scrollTo (x, y, time) {
-      this.scroll.scrollTo(x, y, time)
+      this.scroll && this.scroll.scrollTo && this.scroll.scrollTo(x, y, time)
     },
-    finishPullUp(){
-      this.scroll.finishPullUp()
+    finishPullUp () {
+      this.scroll && this.scroll.scrollTo && this.scroll.finishPullUp()
     },
-    refresh(){
-      this.scroll.refresh()
+    refresh () {
+      console.log('---');
+      this.scroll && this.scroll.scrollTo && this.scroll.refresh()
     }
   },
 }

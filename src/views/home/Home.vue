@@ -19,7 +19,8 @@
 
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
-    <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
+    <back-top @click.native="backClick"
+              v-show="isShowBackTop"></back-top>
 
   </div>
 </template>
@@ -39,9 +40,11 @@ import HomeFeatureView from './childComps/HomeFeatureView.vue'
 
 // 业务js
 import { getHomeMultidata, getHomeGoods } from '../../network/home'
+import { debounce } from '../../common/utils'
 
 
 export default {
+  name: 'Home',
   data () {
     return {
       banners: [],
@@ -80,11 +83,16 @@ export default {
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
 
-    // 3、监听item中图片加载完成
-    this.$bus.$on('itemImageLoad',()=>{
-      this.$refs.scroll.refresh()
-    })
+  },
+  mounted () {
 
+    const refresh = debounce(this.$refs.scroll.refresh, 500)
+
+    // 3、监听item中图片加载完成
+    this.$bus.$on('itemImageLoad', () => {
+      // 闭包
+      refresh()
+    })
   },
   methods: {
     /**
@@ -106,11 +114,14 @@ export default {
     backClick () {
       this.$refs.scroll.scroll.scrollTo(0, 0, 500)
     },
-    contentScroll(position){
-      this.isShowBackTop = Math.abs(position.y)>1000
+    contentScroll (position) {
+      this.isShowBackTop = Math.abs(position.y) > 1000
     },
-    loadMore(){
+    loadMore () {
       this.getHomeGoods(this.currentType)
+
+      // 
+      this.$refs.scroll.refresh()
     },
 
 
