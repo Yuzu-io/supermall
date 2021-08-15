@@ -73,7 +73,7 @@ margin: 0 0 20px 0;
 .shop-top img {
   width: 50px;
   height: 50px;
-  border-radius: 100%;
+  border-radius: 50%;
   margin: 0 20px 0 10px;
 }
 .shop-top .title {

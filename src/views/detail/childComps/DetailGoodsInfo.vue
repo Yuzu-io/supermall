@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Object.keys(detailInfo).length !== 0">
+  <div class="detail-goods-info" v-if="Object.keys(detailInfo).length !== 0">
     <div class="info-text-wrap">
       <div class="text-top-style"></div>
       <div class="desc info-text-desc">{{detailInfo.desc}}</div>
@@ -54,6 +54,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.detail-goods-info{
+  padding: 0 0 20px 0;
+  border-bottom: 4px solid #ededed;
+}
 .info-text-wrap {
   position: relative;
   .text-top-style {

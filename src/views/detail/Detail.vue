@@ -1,12 +1,16 @@
 <template>
   <div id="detail">
     <detail-nav-bar class="detail-nav"></detail-nav-bar>
-    <scroll class="detail-wrapper" ref="scroll">
+    <scroll class="detail-wrapper"
+            ref="scroll">
       <detail-swiper :top-images="topImages"></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
       <detail-goods-info :detail-info="detailInfo"
                          @imageLoad="imageLoad"></detail-goods-info>
+      <detail-param-info :paramInfo="paramInfo"></detail-param-info>
+      <detail-comment-info :commentInfo="commentInfo"></detail-comment-info>
+      <goods-list class="detail-goods-list" :goods="recommend"></goods-list>
     </scroll>
   </div>
 </template>
@@ -17,10 +21,13 @@ import DetailSwiper from './childComps/DetailSwiper.vue'
 import DetailBaseInfo from './childComps/DetailBaseInfo.vue'
 import DetailShopInfo from './childComps/DetailShopInfo.vue'
 import DetailGoodsInfo from './childComps/DetailGoodsInfo.vue'
+import DetailParamInfo from './childComps/DetailParamInfo.vue'
+import DetailCommentInfo from './childComps/DetailCommentInfo.vue'
 
 import Scroll from '../../components/common/scroll/Scroll.vue'
+import GoodsList from '../../components/content/goods/GoodsList.vue'
 
-import { getDetail, Goods, Shop } from '../../network/detail'
+import { getDetail, getRecommend, Goods, Shop, GoodsParam } from '../../network/detail'
 
 export default {
   name: 'Detail',
@@ -30,7 +37,10 @@ export default {
       topImages: [],
       goods: {},
       shop: {},
-      detailInfo: {}
+      detailInfo: {},
+      paramInfo: {},
+      commentInfo: {},
+      recommend:[],
     }
   },
   components: {
@@ -39,8 +49,11 @@ export default {
     DetailBaseInfo,
     DetailShopInfo,
     DetailGoodsInfo,
+    DetailParamInfo,
+    DetailCommentInfo,
 
     Scroll,
+    GoodsList,
   },
   created () {
     // 保存传入的iid
@@ -48,7 +61,7 @@ export default {
 
     // 根据iid请求详细数据
     getDetail(this.iid).then(res => {
-      console.log(res);
+      // console.log(res);
       const data = res.result
       // 1、获取顶部轮播数据
       this.topImages = data.itemInfo.topImages
@@ -62,10 +75,23 @@ export default {
       // 4、获取商品详细信息
       this.detailInfo = data.detailInfo
 
+      // 5、获取参数信息
+      this.paramInfo = new GoodsParam(data.itemParams.info, data.itemParams.rule)
+
+      // 取出评论信息
+      if (data.rate.cRate !== 0) {
+        this.commentInfo = data.rate.list[0]
+      }
+    })
+
+    // 请求推荐数据
+    getRecommend().then(res => {
+      // console.log(res);
+      this.recommend = res.data.list
     })
   },
   methods: {
-    imageLoad() {
+    imageLoad () {
       this.$refs.scroll.refresh()
     }
   },
@@ -86,5 +112,9 @@ export default {
 }
 .detail-wrapper {
   height: calc(100% - 44px);
+  background-color: #fff;
+}
+.detail-goods-list{
+  margin: 10px 0 0 0;
 }
 </style>
