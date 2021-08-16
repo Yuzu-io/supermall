@@ -45,11 +45,11 @@ import HomeFeatureView from './childComps/HomeFeatureView.vue'
 
 // 业务js
 import { getHomeMultidata, getHomeGoods } from '../../network/home'
-import { debounce } from '../../common/utils'
-
+import {itemListenerMixin} from '../../common/mixin'
 
 export default {
   name: 'Home',
+  mixins:[itemListenerMixin],
   data () {
     return {
       banners: [],
@@ -63,7 +63,7 @@ export default {
       isShowBackTop: false,
       tabOffsetTop: 0,
       isTabFixed: false,
-      saveY: 0
+      saveY: 0,
     }
   },
   computed: {
@@ -88,7 +88,11 @@ export default {
     this.$refs.scroll.refresh()
   },
   deactivated () {
+    // 1、保存y值
     this.saveY = this.$refs.scroll.getScrollY()
+
+    // 2、取消全局事件总线的监听
+    this.$bus.$off('itemImageLoad', this.itemImgListstener);
   },
   created () {
     // 1、请求多个数据
@@ -101,13 +105,6 @@ export default {
 
   },
   mounted () {
-    // 1、监听item中图片加载完成
-    const refresh = debounce(this.$refs.scroll.refresh, 500)
-    this.$bus.$on('itemImageLoad', () => {
-      // 闭包
-      refresh()
-    })
-
   },
   methods: {
     /**

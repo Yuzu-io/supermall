@@ -23,6 +23,13 @@ export default {
   methods: {
     imageLoad () {
       this.$bus.$emit('itemImageLoad')
+
+      // 方法一
+      // if (this.$route.path.indexOf('/home') !== -1) {
+      //   this.$bus.$emit('homeItemImageLoad')
+      // }else if(this.$route.path.indexOf('/detail') !== -1){
+      //   this.$bus.$emit('detailItemImageLoad')
+      // }
     },
     itemClick () {
       this.$router.push({
@@ -34,8 +41,8 @@ export default {
     }
   },
   computed: {
-    showImage() {
-      return this.goodsItem.image || this.goodsItem.show.img 
+    showImage () {
+      return this.goodsItem.image || this.goodsItem.show.img
     }
   },
 }

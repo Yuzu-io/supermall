@@ -40,6 +40,7 @@ export default {
   methods: {
     imgLoad () {
       // 判断，所有图片都加载完了，那么进行一次回调就可以了
+      // 节流
       if(++this.counter === this.imagesLength){
         this.$emit('imageLoad')
       }

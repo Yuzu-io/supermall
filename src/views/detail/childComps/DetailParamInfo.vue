@@ -45,11 +45,11 @@ export default {
 <style scoped>
 .params-wrap{
   border-bottom: 4px solid #ededed;
+  padding: 10px 0 0 0;
 }
 .paramInfo-sizes {
   display: flex;
   flex-direction: column;
-  margin: 10px 0 0 0;
 }
 .paramInfo-sizes .flex {
   display: flex;

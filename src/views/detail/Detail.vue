@@ -1,16 +1,23 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav"></detail-nav-bar>
+    <detail-nav-bar class="detail-nav"
+                    @titleClick="titleClick" ref="nav"></detail-nav-bar>
     <scroll class="detail-wrapper"
-            ref="scroll">
+            ref="scroll"
+            @scroll="contenScroll"
+            :probe-type="3">
       <detail-swiper :top-images="topImages"></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
       <detail-goods-info :detail-info="detailInfo"
                          @imageLoad="imageLoad"></detail-goods-info>
-      <detail-param-info :paramInfo="paramInfo"></detail-param-info>
-      <detail-comment-info :commentInfo="commentInfo"></detail-comment-info>
-      <goods-list class="detail-goods-list" :goods="recommend"></goods-list>
+      <detail-param-info ref="param"
+                         :paramInfo="paramInfo"></detail-param-info>
+      <detail-comment-info ref="comment"
+                           :commentInfo="commentInfo"></detail-comment-info>
+      <goods-list ref="recommend"
+                  class="detail-goods-list"
+                  :goods="recommend"></goods-list>
     </scroll>
   </div>
 </template>
@@ -28,9 +35,11 @@ import Scroll from '../../components/common/scroll/Scroll.vue'
 import GoodsList from '../../components/content/goods/GoodsList.vue'
 
 import { getDetail, getRecommend, Goods, Shop, GoodsParam } from '../../network/detail'
+import { itemListenerMixin } from '../../common/mixin'
 
 export default {
   name: 'Detail',
+  mixins: [itemListenerMixin],
   data () {
     return {
       iid: null,
@@ -40,7 +49,9 @@ export default {
       detailInfo: {},
       paramInfo: {},
       commentInfo: {},
-      recommend:[],
+      recommend: [],
+      themeTopYs: [],
+      currentIndex: 0
     }
   },
   components: {
@@ -89,11 +100,40 @@ export default {
       // console.log(res);
       this.recommend = res.data.list
     })
+
   },
   methods: {
     imageLoad () {
       this.$refs.scroll.refresh()
+
+      // 
+      this.themeTopYs.push(0)
+      this.themeTopYs.push(this.$refs.param.$el.offsetTop - 44)
+      this.themeTopYs.push(this.$refs.comment.$el.offsetTop - 44)
+      this.themeTopYs.push(this.$refs.recommend.$el.offsetTop - 44)
+      // console.log(this.themeTopYs);
+    },
+    titleClick (index) {
+      // console.log(index);
+      this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 500)
+    },
+    contenScroll (position) {
+      // 1、获取y值
+      const positionY = -position.y
+      // 2、positionY和主题中的值进行对比
+      let length = this.themeTopYs.length - 1
+      for (let i = 0; i < this.themeTopYs.length; i++) {
+        if (this.currentIndex !== i && ((i < length && positionY >= this.themeTopYs[i] && positionY < this.themeTopYs[i + 1]) || (i === length && positionY > this.themeTopYs[i]))) {
+          this.currentIndex = i
+          this.$refs.nav.currentIndex = this.currentIndex
+        }
+      }
     }
+  },
+  mounted () {
+  },
+  destroyed () {
+    this.$bus.$off('itemImageLoad', this.itemImgListstener);
   },
 }
 </script>
@@ -113,8 +153,5 @@ export default {
 .detail-wrapper {
   height: calc(100% - 44px);
   background-color: #fff;
-}
-.detail-goods-list{
-  margin: 10px 0 0 0;
 }
 </style>
