@@ -1,7 +1,8 @@
 <template>
   <div id="detail">
     <detail-nav-bar class="detail-nav"
-                    @titleClick="titleClick" ref="nav"></detail-nav-bar>
+                    @titleClick="titleClick"
+                    ref="nav"></detail-nav-bar>
     <scroll class="detail-wrapper"
             ref="scroll"
             @scroll="contenScroll"
@@ -19,6 +20,9 @@
                   class="detail-goods-list"
                   :goods="recommend"></goods-list>
     </scroll>
+    <back-top @click.native="backClick"
+              v-show="isShowBackTop"></back-top>
+    <detail-bottom-bar @addCart="addCart"></detail-bottom-bar>
   </div>
 </template>
 
@@ -30,16 +34,17 @@ import DetailShopInfo from './childComps/DetailShopInfo.vue'
 import DetailGoodsInfo from './childComps/DetailGoodsInfo.vue'
 import DetailParamInfo from './childComps/DetailParamInfo.vue'
 import DetailCommentInfo from './childComps/DetailCommentInfo.vue'
+import DetailBottomBar from './childComps/DetailBottomBar.vue'
 
 import Scroll from '../../components/common/scroll/Scroll.vue'
 import GoodsList from '../../components/content/goods/GoodsList.vue'
 
 import { getDetail, getRecommend, Goods, Shop, GoodsParam } from '../../network/detail'
-import { itemListenerMixin } from '../../common/mixin'
+import { itemListenerMixin, backTopMixin } from '../../common/mixin'
 
 export default {
   name: 'Detail',
-  mixins: [itemListenerMixin],
+  mixins: [itemListenerMixin, backTopMixin],
   data () {
     return {
       iid: null,
@@ -51,7 +56,7 @@ export default {
       commentInfo: {},
       recommend: [],
       themeTopYs: [],
-      currentIndex: 0
+      currentIndex: 0,
     }
   },
   components: {
@@ -62,6 +67,7 @@ export default {
     DetailGoodsInfo,
     DetailParamInfo,
     DetailCommentInfo,
+    DetailBottomBar,
 
     Scroll,
     GoodsList,
@@ -128,7 +134,23 @@ export default {
           this.$refs.nav.currentIndex = this.currentIndex
         }
       }
-    }
+
+      // 3、判断BackTop是否显示
+      this.isShowBackTop = Math.abs(position.y) > 1000
+    },
+    addCart () {
+      // 1、获取购物车需要展示的信息
+      const product = {}
+      product.image = this.topImages[0]
+      product.title = this.goods.title
+      product.desc = this.goods.desc
+      product.price = this.goods.lowNowPrice
+      product.iid = this.iid
+
+      // 2、将商品添加到购物车里
+      // this.$store.commit('addCart',product)
+      this.$store.dispatch('addCart',product)
+    },
   },
   mounted () {
   },
@@ -151,7 +173,8 @@ export default {
   background-color: #fff;
 }
 .detail-wrapper {
-  height: calc(100% - 44px);
+  height: calc(100% - 93px);
   background-color: #fff;
+  overflow: hidden;
 }
 </style>

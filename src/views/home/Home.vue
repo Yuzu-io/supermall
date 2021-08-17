@@ -36,7 +36,6 @@ import NavBar from '../../components/common/navbar/NavBar.vue'
 import Scroll from '../../components/common/scroll/Scroll.vue'
 import TabControl from '../../components/content/tabControl/TabControl.vue'
 import GoodsList from '../../components/content/goods/GoodsList.vue'
-import BackTop from '../../components/content/backTop/BackTop.vue'
 
 // home子组件
 import HomeSwiper from './childComps/HomeSwiper.vue'
@@ -45,11 +44,11 @@ import HomeFeatureView from './childComps/HomeFeatureView.vue'
 
 // 业务js
 import { getHomeMultidata, getHomeGoods } from '../../network/home'
-import {itemListenerMixin} from '../../common/mixin'
+import { itemListenerMixin, backTopMixin } from '../../common/mixin'
 
 export default {
   name: 'Home',
-  mixins:[itemListenerMixin],
+  mixins: [itemListenerMixin, backTopMixin],
   data () {
     return {
       banners: [],
@@ -60,7 +59,6 @@ export default {
         'sell': { page: 0, list: [] },
       },
       currentType: 'pop',
-      isShowBackTop: false,
       tabOffsetTop: 0,
       isTabFixed: false,
       saveY: 0,
@@ -76,7 +74,6 @@ export default {
     Scroll,
     TabControl,
     GoodsList,
-    BackTop,
 
     HomeSwiper,
     HomeRecommendView,
@@ -124,9 +121,6 @@ export default {
       }
       this.$refs.tabControlFixed.currentIndex = index
       this.$refs.tabControl.currentIndex = index
-    },
-    backClick () {
-      this.$refs.scroll.scroll.scrollTo(0, 0, 500)
     },
     contentScroll (position) {
       // 1、判断BackTop是否显示
