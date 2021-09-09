@@ -1,3 +1,7 @@
+# 购物网站
+
+## 技术栈：vue、better-scroll
+
 # supermall
 
 ## Project setup
