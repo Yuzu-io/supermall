@@ -2,7 +2,7 @@
 
 ## 技术栈：vue、better-scroll
 
-# supermall
+# 项目名：supermall
 
 ## Project setup
 ```
